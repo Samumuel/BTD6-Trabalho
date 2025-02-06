@@ -4,9 +4,9 @@ CREATE TABLE btd6 (
     nome varchar (50) NOT NULL,
     classe varchar(15) NOT NULL,
     valor varchar (4) NOT NULL,
-    alcance varchar (10) NOT NULL,
+    alcance varchar (70) NOT NULL,
     funcao varchar (20),
-    area varchar (10)
+    area varchar (10),
     PRIMARY KEY (id)
 );
 

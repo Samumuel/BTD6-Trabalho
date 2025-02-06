@@ -1,10 +1,26 @@
-<?php 
+<?php
 
 require_once("Unidade.php");
 
-class UConstrucao extends Unidade {
-    
+class UConstrucao extends Unidade
+{
+
     private string $funcao;
+
+
+    public function __toString()
+    {
+        return sprintf(
+            "%d | Tipo: %s | Nome: %s | Classe: %s | Valor: %d | Alcance: %s | Função: %s\n",
+            $this->getId(),
+            $this->getTipo(),
+            $this->getNome(),
+            $this->getClasse(),
+            $this->getValor(),
+            $this->getAlcance(),
+            $this->getFuncao()
+        );
+    }
 
 
     public function getTipo()

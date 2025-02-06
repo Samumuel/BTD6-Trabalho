@@ -1,6 +1,7 @@
 <?php
 
-abstract class Unidade {
+abstract class Unidade
+{
 
     protected int $id;
 
@@ -10,16 +11,10 @@ abstract class Unidade {
 
     private int $valor;
 
-    private string $alcance;
+    private $alcance;
 
     public abstract function getTipo();
 
-    public function __toString() {
-        return sprintf("%d- %s | %s | %s | %s | %s\n",
-                        $this->id, $this->getTipo());
-        }
-
-        
 
     /**
      * Get the value of id

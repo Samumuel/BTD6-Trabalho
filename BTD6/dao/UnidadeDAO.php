@@ -3,7 +3,6 @@
 require_once("modelo/Unidade.php");
 require_once("modelo/Macaco.php");
 require_once("modelo/Construcao.php");
-
 require_once("util/Conexao.php");
 
 class UnidadeDAO
@@ -12,7 +11,6 @@ class UnidadeDAO
     public function inserirUnidade(Unidade $unidade)
     {
 
-
         $sql = "INSERT INTO btd6 (tipo, nome, classe, valor, alcance, area, funcao)
                 VALUES
                 (?,?,?,?,?,?,?)";
@@ -20,6 +18,7 @@ class UnidadeDAO
         $con = Conexao::getCon();
 
         $stm = $con->prepare($sql);
+
         if ($unidade instanceof UMacaco) {
             $stm->execute(array(
                 $unidade->getTipo(),
@@ -46,16 +45,17 @@ class UnidadeDAO
 
     public function listarUnidades()
     {
+
         $sql = "SELECT * FROM btd6";
 
         $con = Conexao::getCon();
-
         $stm = $con->prepare($sql);
         $stm->execute();
-        $registros = $stm->fetchAll();
+        $registros = $stm->fetchAll(PDO::FETCH_ASSOC);
 
-        $unidades = $this->mapUnidades($registros);
-        return $unidades;
+
+
+        return $this->mapUnidades($registros);
     }
 
     public function buscarPorId(int $idUnidade)
@@ -92,23 +92,25 @@ class UnidadeDAO
         $unidades = array();
 
         foreach ($registros as $reg) {
-            $unidades = null;
+            // Remover a linha abaixo
+            // $unidades = null; 
+
             if ($reg['tipo'] == 'Macaco') {
                 $unidade = new UMacaco();
-                $unidade->setNome($reg['nome']);
-                $unidade->setClasse($reg['classe']);
+                $unidade->setArea($reg['area']);
             } else {
                 $unidade = new UConstrucao();
-                $unidade->setNome($reg['nome']);
-                $unidade->setClasse($reg['classe']);
+                $unidade->setFuncao($reg['funcao']);
             }
             $unidade->setId($reg['id']);
+            $unidade->setNome($reg['nome']);
+            $unidade->setClasse($reg['classe']);
             $unidade->setValor($reg['valor']);
             $unidade->setAlcance($reg['alcance']);
-            $unidade->setArea($reg['area']);
-            array_push($unidades, $unidade);
+
+            $unidades[] = $unidade; // Adiciona a unidade ao array
         }
 
-        return $unidades;
+        return $unidades; // Retorna todas as unidades
     }
 }

@@ -3,13 +3,13 @@
 require_once("modelo/Macaco.php");
 require_once("modelo/Construcao.php");
 require_once("dao/UnidadeDAO.php");
-require_once("util/conexao.php");
+require_once("util/Conexao.php");
 
 $conexao = new Conexao();
 $con = Conexao::getCon();
 //print_r($con);
 
-$opcao = 0; 
+$opcao = 0;
 
 do {
     echo "\n-----------CADASTRO DE CLIENTES-------\n";
@@ -29,7 +29,7 @@ do {
             $unidade->setClasse(readline("Informe a classe deste Macaco: "));
             $unidade->setValor(readline("Informe o valor do Macaco: "));
             $unidade->setArea(readline("Informe a área deste Macaco: "));
-            $unidade->setAlcance("Informe o alcance deste Macaco: ");
+            $unidade->setAlcance(readline("Informe o alcance deste Macaco: "));
 
             $BTD6DAO = new  UnidadeDAO();
             $BTD6DAO->inserirUnidade($unidade);
@@ -53,18 +53,15 @@ do {
         case 3:
             //buscar os objetos no banco de dados
             $BTD6DAO = new UnidadeDAO();
-            $unidade = $BTD6DAO->listarUnidades();
+            $unidades = $BTD6DAO->listarUnidades();
 
-            //exbibir os dados dos objetos
-            foreach ($unidades as $u) {
-                
-                    printf("%d- %s | %s | %s | %s | %s\n",
-                $u->getId(), $u->getTipo(), $u->getNome(),
-                $u->getValor(), $u->getClasse(), $u->getArea(),
-                $u->getAlcance(), $u->getFuncao);
-                
+            if($unidades == null){
+                echo 'Nenhuma unidade cadastrada.';
+            } else {
+                foreach ($unidades as $u) {
+                    echo $u;
+                }
             }
-
             break;
         case 4:
             //buscar cliente pelo ID
@@ -81,11 +78,10 @@ do {
             //3.1- se for diferente de null, mostrar os dados do cliente
             //3.2- Se for igual a null, mostrar mensagem que o cliente nao foi encontrado
 
-            if($cliente != null){
-                echo $cliente; //fazer to_string
-            }
-            else 
-                echo "Cliente não encontrado\n";
+            if ($unidade != null) {
+                echo $unidade; //fazer to_string
+            } else
+                echo "Unidade não encontrado\n";
 
 
             break;
@@ -97,30 +93,31 @@ do {
             $BTD6DAO = new UnidadeDAO();
             $unidades = $BTD6DAO->listarUnidades();
 
-            //exbibir os dados dos objetos
-            foreach ($unidades as $u) {
-                
-                echo $u;
-                
+            if($unidades == null){
+                echo 'Nenhuma unidade cadastrada.';
+            } else {
+                foreach ($unidades as $u) {
+                    echo $u;
+                }
             }
 
             //2- solicitar o id
 
-            $id = readline("informe o id da unidade que deseja excluir: ") ;
+            $id = readline("informe o id da unidade que deseja excluir: ");
 
             $unidade = $BTD6DAO->buscarPorId($id);
-            if($unidade){
-            
-            //3- chamar o clienteDAO para remover da base de dados
+            if ($unidade) {
 
-            $BTD6DAO->excluirPorId($id);
-            
+                //3- chamar o clienteDAO para remover da base de dados
 
-            //4- Informar que o cliente foi excluido
-            echo "Unidade excluido com sucesso";}
-            else   
-                    echo "\nUnidade não encontrado.\n";
-            
+                $BTD6DAO->excluirPorId($id);
+
+
+                //4- Informar que o cliente foi excluido
+                echo "Unidade excluido com sucesso";
+            } else
+                echo "\nUnidade não encontrado.\n";
+
             break;
         case 0:
             break;
